@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="is">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#bfe9ff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <title>Gefðu dýrunum að borða</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<svg id="game" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" preserveAspectRatio="xMidYMid meet">
+
+  <defs>
+    <!-- Mouth shapes. Hidden inside <defs>. -->
+    <path id="monkey-closed" d="M -16 0 Q 0 6 16 0 Q 0 8 -16 0 Z"/>
+    <path id="monkey-smile"  d="M -18 -2 Q 0 22 18 -2 Q 0 6 -18 -2 Z"/>
+    <path id="monkey-open"   d="M -13 -4 Q 0 26 13 -4 Q 0 -12 -13 -4 Z"/>
+    <path id="monkey-frown"  d="M -14 8 Q 0 -4 14 8 Q 0 2 -14 8 Z"/>
+
+    <path id="fox-closed" d="M -12 10 Q 0 15 12 10 Q 0 17 -12 10 Z"/>
+    <path id="fox-smile"  d="M -14 8 Q 0 30 14 8 Q 0 14 -14 8 Z"/>
+    <path id="fox-open"   d="M -11 8 Q 0 34 11 8 Q 0 2 -11 8 Z"/>
+    <path id="fox-frown"  d="M -11 16 Q 0 6 11 16 Q 0 10 -11 16 Z"/>
+  </defs>
+
+  <!-- BACKGROUND -->
+  <g id="background">
+    <rect x="-3000" y="-3000" width="7000" height="7000" fill="#bfe9ff"/>
+    <circle cx="90" cy="90" r="50" fill="#ffe27a"/>
+    <g id="cloud" class="box">
+      <ellipse cx="0" cy="0" rx="60" ry="28" fill="#fff"/>
+      <ellipse cx="-35" cy="8" rx="40" ry="22" fill="#fff"/>
+      <ellipse cx="40" cy="10" rx="38" ry="20" fill="#fff"/>
+    </g>
+    <rect id="ground" x="-3000" y="430" width="7000" height="5000" fill="#9fdc7c"/>
+  </g>
+
+  <!-- Hint line that draws itself from the food to the animal -->
+  <path id="hint" d="M 0 0" fill="none" stroke="#ffffff" stroke-width="8" stroke-linecap="round" opacity="0"/>
+
+  <!-- ANIMALS -->
+  <g id="animals">
+
+    <!-- MONKEY -->
+    <g id="monkey" class="animal box" data-animal="monkey">
+     <g transform="scale(1.3)"> <!-- draw the animal a bit bigger -->
+      <circle class="hold-ring" cx="0" cy="0" r="150" transform="rotate(-90)"/>
+      <g class="bounce">
+        <path d="M 45 85 C 95 95 105 40 80 30 C 65 25 60 45 72 48" fill="none" stroke="#5b3a29" stroke-width="10" stroke-linecap="round"/>
+        <ellipse cx="0" cy="65" rx="55" ry="50" fill="#5b3a29"/>
+        <ellipse cx="0" cy="75" rx="34" ry="32" fill="#f1d9a7"/>
+        <ellipse cx="-38" cy="110" rx="22" ry="12" fill="#f1d9a7"/>
+        <ellipse cx="38" cy="110" rx="22" ry="12" fill="#f1d9a7"/>
+        <g class="head">
+          <circle cx="-58" cy="-25" r="22" fill="#5b3a29"/>
+          <circle cx="-58" cy="-25" r="13" fill="#f1d9a7"/>
+          <circle cx="58" cy="-25" r="22" fill="#5b3a29"/>
+          <circle cx="58" cy="-25" r="13" fill="#f1d9a7"/>
+          <circle cx="0" cy="-25" r="55" fill="#5b3a29"/>
+          <circle cx="-18" cy="-35" r="21" fill="#f1d9a7"/>
+          <circle cx="18" cy="-35" r="21" fill="#f1d9a7"/>
+          <ellipse cx="0" cy="-5" rx="38" ry="27" fill="#f1d9a7"/>
+          <g class="eyes">
+            <circle cx="-17" cy="-35" r="6" fill="#2b1a12"/>
+            <circle cx="17" cy="-35" r="6" fill="#2b1a12"/>
+            <circle cx="-15" cy="-37" r="2" fill="#fff"/>
+            <circle cx="19" cy="-37" r="2" fill="#fff"/>
+          </g>
+          <ellipse cx="-5" cy="-14" rx="2.5" ry="3" fill="#2b1a12"/>
+          <ellipse cx="5" cy="-14" rx="2.5" ry="3" fill="#2b1a12"/>
+          <circle cx="-27" cy="-8" r="6" fill="#f2a0a0" opacity="0.6"/>
+          <circle cx="27" cy="-8" r="6" fill="#f2a0a0" opacity="0.6"/>
+          <path class="mouth" d="M -16 0 Q 0 6 16 0 Q 0 8 -16 0 Z"/>
+        </g>
+        <g class="zzz">
+          <path class="z box" d="M 45 -95 h 16 l -16 16 h 16"/>
+          <path class="z box" d="M 60 -120 h 20 l -20 20 h 20"/>
+          <path class="z box" d="M 78 -150 h 24 l -24 24 h 24"/>
+        </g>
+      </g>
+     </g>
+    </g>
+
+    <!-- FOX -->
+    <g id="fox" class="animal box" data-animal="fox">
+     <g transform="scale(1.3)"> <!-- draw the animal a bit bigger -->
+      <circle class="hold-ring" cx="0" cy="0" r="150" transform="rotate(-90)"/>
+      <g class="bounce">
+        <path d="M 35 85 C 100 85 115 20 85 -5 C 80 40 60 60 30 60 Z" fill="#e0702c"/>
+        <path d="M 85 -5 C 95 5 100 20 97 30 C 90 22 82 15 78 10 Z" fill="#fff6ec"/>
+        <ellipse cx="0" cy="65" rx="45" ry="50" fill="#e0702c"/>
+        <path d="M -25 30 Q 0 20 25 30 Q 22 75 0 85 Q -22 75 -25 30 Z" fill="#fff6ec"/>
+        <rect x="-28" y="95" width="16" height="22" rx="6" fill="#4a2a1a"/>
+        <rect x="12" y="95" width="16" height="22" rx="6" fill="#4a2a1a"/>
+        <g class="head">
+          <path d="M -58 -40 L -45 -100 L -12 -62 Z" fill="#e0702c"/>
+          <path d="M -50 -48 L -43 -85 L -22 -60 Z" fill="#4a2a1a"/>
+          <path d="M 58 -40 L 45 -100 L 12 -62 Z" fill="#e0702c"/>
+          <path d="M 50 -48 L 43 -85 L 22 -60 Z" fill="#4a2a1a"/>
+          <path d="M -65 -35 Q -62 -75 0 -75 Q 62 -75 65 -35 Q 55 10 0 25 Q -55 10 -65 -35 Z" fill="#e0702c"/>
+          <path d="M -60 -22 Q -28 -28 0 -8 Q 28 -28 60 -22 Q 45 12 0 25 Q -45 12 -60 -22 Z" fill="#fff6ec"/>
+          <g class="eyes">
+            <circle cx="-22" cy="-35" r="6" fill="#2b1a12"/>
+            <circle cx="22" cy="-35" r="6" fill="#2b1a12"/>
+            <circle cx="-20" cy="-37" r="2" fill="#fff"/>
+            <circle cx="24" cy="-37" r="2" fill="#fff"/>
+          </g>
+          <ellipse cx="0" cy="-2" rx="7" ry="5" fill="#2b1a12"/>
+          <path class="mouth" d="M -12 10 Q 0 15 12 10 Q 0 17 -12 10 Z"/>
+        </g>
+        <g class="zzz">
+          <path class="z box" d="M 45 -105 h 16 l -16 16 h 16"/>
+          <path class="z box" d="M 60 -130 h 20 l -20 20 h 20"/>
+          <path class="z box" d="M 78 -160 h 24 l -24 24 h 24"/>
+        </g>
+      </g>
+     </g>
+    </g>
+  </g>
+
+  <!-- FOOD, starts inside the jars -->
+  <g id="food-layer">
+    <g id="banana" class="food box" data-food="banana">
+      <circle r="55" fill="transparent"/> <!-- bigger touch area for small fingers -->
+      <g transform="scale(1.3)">
+        <path d="M -35 -10 Q -5 30 40 -5 Q 30 -2 25 -8 Q -5 12 -28 -18 Z" fill="#f6d33c" stroke="#d9a91c" stroke-width="2" stroke-linejoin="round"/>
+        <path d="M -28 -18 L -33 -26" stroke="#6b4b2a" stroke-width="5" stroke-linecap="round"/>
+      </g>
+    </g>
+    <g id="fish" class="food box" data-food="fish">
+      <circle r="55" fill="transparent"/>
+      <g transform="scale(1.3)">
+        <path d="M 22 0 L 42 -14 L 42 14 Z" fill="#3b88c4"/>
+        <ellipse cx="0" cy="0" rx="28" ry="16" fill="#4aa3df"/>
+        <circle cx="-14" cy="-4" r="3.5" fill="#1d3b55"/>
+        <path d="M 0 -10 Q 6 0 0 10" fill="none" stroke="#3b88c4" stroke-width="2"/>
+      </g>
+    </g>
+  </g>
+
+  <!--  JARS, twist the lid with two fingers -->
+  <g id="jars">
+    <g id="jar-banana" class="jar box" data-food="banana">
+      <rect x="-70" y="-38" width="140" height="120" rx="26" fill="#d6f0ff" fill-opacity="0.55" stroke="#7cc3ee" stroke-width="5"/>
+      <path d="M -48 -20 Q -56 20 -48 60" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity="0.8"/>
+      <g class="lid box">
+        <circle cx="0" cy="-70" r="56" fill="#ff6b6b" stroke="#d94a4a" stroke-width="5"/>
+        <circle cx="0" cy="-112" r="9" fill="#ffd1d1"/>
+        <circle cx="42" cy="-70" r="9" fill="#ffd1d1"/>
+        <circle cx="0" cy="-28" r="9" fill="#ffd1d1"/>
+        <circle cx="-42" cy="-70" r="9" fill="#ffd1d1"/>
+        <circle cx="0" cy="-70" r="16" fill="#d94a4a"/>
+      </g>
+    </g>
+    <g id="jar-fish" class="jar box" data-food="fish">
+      <rect x="-70" y="-38" width="140" height="120" rx="26" fill="#d6f0ff" fill-opacity="0.55" stroke="#7cc3ee" stroke-width="5"/>
+      <path d="M -48 -20 Q -56 20 -48 60" fill="none" stroke="#fff" stroke-width="8" stroke-linecap="round" opacity="0.8"/>
+      <g class="lid box">
+        <circle cx="0" cy="-70" r="56" fill="#8a6bff" stroke="#6a4be0" stroke-width="5"/>
+        <circle cx="0" cy="-112" r="9" fill="#ddd3ff"/>
+        <circle cx="42" cy="-70" r="9" fill="#ddd3ff"/>
+        <circle cx="0" cy="-28" r="9" fill="#ddd3ff"/>
+        <circle cx="-42" cy="-70" r="9" fill="#ddd3ff"/>
+        <circle cx="0" cy="-70" r="16" fill="#6a4be0"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- Dragged food and hearts go here so they are on top -->
+  <g id="top-layer"></g>
+
+  <!--  RESTART, hold for 2 seconds)  -->
+  <g id="replay" class="box">
+    <circle class="hold-ring" cx="0" cy="0" r="50" transform="rotate(-90)"/>
+    <circle cx="0" cy="0" r="38" fill="#fff" stroke="#4aa3df" stroke-width="5"/>
+    <path d="M 13 -13 A 18 18 0 1 0 18 4" fill="none" stroke="#4aa3df" stroke-width="6" stroke-linecap="round"/>
+    <path d="M 4 -20 L 20 -20 L 18 -4 Z" fill="#4aa3df"/>
+  </g>
+
+  <!--  STAR (follows a motion path when the level is finished)  -->
+  <path id="star-path" d="M 0 0" fill="none" stroke="#ffd84a" stroke-width="6" stroke-linecap="round" opacity="0"/>
+  <g id="star" class="box" opacity="0">
+    <path d="M 0 -28 L 7.05 -9.71 L 26.63 -8.65 L 11.41 3.71 L 16.46 22.65 L 0 12 L -16.46 22.65 L -11.41 3.71 L -26.63 -8.65 L -7.05 -9.71 Z"
+          fill="#ffd84a" stroke="#f5a623" stroke-width="3" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Circles that show where your touching -->
+  <g id="touch-layer"></g>
+</svg>
+
+<script type="module" src="game.js"></script>
+</body>
+</html>
