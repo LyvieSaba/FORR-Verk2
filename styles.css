@@ -1,0 +1,76 @@
+/* The game fills the whole screen on phones and tablets */
+html,
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: #bfe9ff;
+}
+
+#game {
+  display: block;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;            /* correct height on phones where the URL bar comes and goes */
+  touch-action: none;        /* stop the browser from scrolling/zooming while dragging */
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none; /* no iOS popup menu on long press */
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Everything anime.js rotates or scales turns around its own center */
+.box,
+.head,
+.eyes {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* Animals breathe and jump from their feet, not their center */
+.bounce {
+  transform-box: fill-box;
+  transform-origin: center bottom;
+}
+
+.mouth {
+  fill: #2b1a12;
+  stroke: #2b1a12;
+  stroke-width: 3;
+  stroke-linejoin: round;
+}
+
+.z {
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+}
+
+/* The ring that fills up while you hold */
+.hold-ring {
+  fill: none;
+  stroke: #ffd84a;
+  stroke-width: 12;
+  stroke-linecap: round;
+  pointer-events: none;
+}
+
+.touch {
+  fill: #ffffff;
+  fill-opacity: 0.45;
+  stroke: #ffffff;
+  stroke-width: 4;
+}
+
+#touch-layer,
+#hint,
+#star,
+#star-path,
+#background,
+.zzz,
+.heart {
+  pointer-events: none;
+}
