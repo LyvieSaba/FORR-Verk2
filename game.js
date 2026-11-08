@@ -14,12 +14,12 @@ const ANIMAL_SCALE = 1.3;       // animals are drawn 1.3x bigger (see index.html
 //  Layouts for landscape and portrait screens 
 const LAYOUTS = {
   landscape: {
-    size: [1000, 700],
-    ground: 430,
+    size: [1000, 700], // view width and lenght
+    ground: 430, // where the ground starts
     animals: { monkey: [300, 225], fox: [700, 225] },
     jars: { fish: [300, 575], banana: [700, 575] },   // crossed, so the child has to choose
-    replay: [945, 55],
-    starPath: 'M 40 640 C 250 -80, 750 -80, 960 640',
+    replay: [945, 55],  //restart button
+    starPath: 'M 40 640 C 250 -80, 750 -80, 960 640', // path where the star flies
   },
   portrait: {
     size: [700, 1300],
@@ -30,7 +30,7 @@ const LAYOUTS = {
     starPath: 'M 30 1200 C 120 -100, 580 -100, 670 1200',
   },
 };
-let layout = LAYOUTS.landscape;
+let layout = LAYOUTS.landscape; // layout thats in use rn
 
 // Game objects 
 function makeAnimal(id, mouthY) {
@@ -58,19 +58,20 @@ function makeFood(id, forAnimal) {
   return { id, el: $('#' + id), forAnimal, state: 'locked', x: 0, y: 0, busy: false, pointerId: null, jar: null };
 }
 const foods = {
-  banana: makeFood('banana', 'monkey'),
-  fish: makeFood('fish', 'fox'),
+  banana: makeFood('banana', 'monkey'), // banana goes to moneky
+  fish: makeFood('fish', 'fox'), // fish goes to fox
 };
 
 function makeJar(foodId) {
   const el = $('#jar-' + foodId);
   const jar = {
     el, lid: el.querySelector('.lid'), food: foods[foodId],
-    open: false, rotation: 0, lastAngle: null,
+    open: false, rotation: 0,  // how many degress the lid has been rotated
+    lastAngle: null,
     pointers: new Map(),   // every finger currently on this jar
-    wiggle: null, x: 0, y: 0,
+    wiggle: null, x: 0, y: 0, // animation
   };
-  foods[foodId].jar = jar;
+  foods[foodId].jar = jar; // stores location for reset
   return jar;
 }
 const jars = { banana: makeJar('banana'), fish: makeJar('fish') };
@@ -82,7 +83,7 @@ const touchLayer = $('#touch-layer');
 
 //  LAYOUT 
 function applyLayout() {
-  layout = innerWidth >= innerHeight ? LAYOUTS.landscape : LAYOUTS.portrait;
+  layout = innerWidth >= innerHeight ? LAYOUTS.landscape : LAYOUTS.portrait; // wider than tall = landscape
   const [w, h] = layout.size;
   svgEl.setAttribute('viewBox', `0 0 ${w} ${h}`);
   $('#ground').setAttribute('y', layout.ground);
@@ -174,13 +175,22 @@ function onDown(e) {
   e.preventDefault();
   svgEl.setPointerCapture(e.pointerId);   // keep getting moves for this finger
   const p = toSvg(e);
-  const info = { id: e.pointerId, type: e.pointerType, start: p, last: p, touch: showTouch(p), action: null };
+  const info = { // info about this finger
+    id: e.pointerId, 
+    type: e.pointerType, 
+    start: p, // where the finger first touched
+    last: p, // where the finger was last touched
+    touch: showTouch(p), // outline
+    action: null }; // what its doing
+
   pointers.set(e.pointerId, info);
 
+  //find what was touched
   const foodEl = e.target.closest('.food');
   const jarEl = e.target.closest('.jar');
   const animalEl = e.target.closest('.animal');
 
+  // start the correct actionb
   if (foodEl) startFood(info, foods[foodEl.dataset.food]);
   else if (jarEl) startJar(info, jars[jarEl.dataset.food]);
   else if (animalEl) tapAnimal(info, animals[animalEl.dataset.animal]);
@@ -189,9 +199,9 @@ function onDown(e) {
 
 function onMove(e) {
   const info = pointers.get(e.pointerId);
-  if (!info) return;
+  if (!info) return; // finger we dont know abt = ignore
   const p = toSvg(e);
-  info.last = p;
+  info.last = p; // remember new position
   utils.set(info.touch, { x: p.x, y: p.y });
 
   if (info.action === 'food' && info.ready) {
@@ -474,33 +484,35 @@ function resetGame() {
   if (replay.pulse) { replay.pulse.pause(); replay.pulse = null; }
   utils.set(replay.el, { scale: 1 });
 
-  for (const info of pointers.values()) info.action = null;
+  for (const info of pointers.values()) info.action = null; // forget everything
 
   for (const a of Object.values(animals)) {
     a.awake = false;
     a.fed = false;
-    a.mouth.setAttribute('d', $(`#${a.id}-closed`).getAttribute('d'));
-    utils.set(a.eyes, { scaleY: 0.15 });
+    a.mouth.setAttribute('d', $(`#${a.id}-closed`).getAttribute('d')); // closed mouth again
+    utils.set(a.eyes, { scaleY: 0.15 }); // closed eyes again
     utils.set(a.head, { rotate: 0, scale: 1, scaleY: 1 });
-    a.zzzAnim.restart();
+    a.zzzAnim.restart(); // zzz starts again
   }
   for (const j of Object.values(jars)) {
     j.open = false;
     j.rotation = 0;
     j.pointers.clear();
     utils.set(j.lid, { y: 0, rotate: 0, opacity: 1 });
+    // start animation again if it was stopped
     if (!j.wiggle) j.wiggle = animate(j.lid, { rotate: [0, -15, 15, -10, 0], duration: 900, loop: true, loopDelay: 1800, ease: 'inOutSine' });
+    // food bacvk into jar
     const f = j.food;
     f.state = 'locked';
     f.busy = false;
     f.pointerId = null;
-    f.el.style.pointerEvents = '';
-    foodLayer.append(f.el);
+    f.el.style.pointerEvents = ''; // can be touched agaon
+    foodLayer.append(f.el); // food goes behind jar
     utils.set(f.el, { scale: 1, opacity: 1, rotate: 0 });
   }
   utils.set('#star', { opacity: 0 });
   utils.set('#star-path', { opacity: 0 });
-  applyLayout();
+  applyLayout(); // reset food
   intro();
 }
 
@@ -509,13 +521,13 @@ function resetGame() {
 // =============================================================
 for (const a of Object.values(animals)) {
   utils.set(a.eyes, { scaleY: 0.15 });   // eyes closed = asleep
-  utils.set(a.ring, { opacity: 0 });
-  utils.set(a.ringDraw, { draw: '0 0' });
+  utils.set(a.ring, { opacity: 0 }); // ring is hidden
+  utils.set(a.ringDraw, { draw: '0 0' }); 
 }
-utils.set(replay.ring, { opacity: 0 });
+utils.set(replay.ring, { opacity: 0 }); //
 utils.set(replay.ringDraw, { draw: '0 0' });
 
-applyLayout();
-addEventListener('resize', applyLayout);
-startIdle();
+applyLayout(); // set layout
+addEventListener('resize', applyLayout); // resize layout
+startIdle(); // start animation
 intro();
