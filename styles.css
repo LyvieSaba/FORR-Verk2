@@ -11,7 +11,7 @@ body {
   display: block;
   width: 100vw;
   height: 100vh;
-  height: 100dvh;            /* correct height on phones where the URL bar comes and goes */
+  height: 100dvh;            /* correct height on phones */
   touch-action: none;        /* stop the browser from scrolling/zooming while dragging */
   user-select: none;
   -webkit-user-select: none;
@@ -27,7 +27,7 @@ body {
   transform-origin: center;
 }
 
-/* Animals breathe and jump from their feet, not their center */
+/* Animals breathe and jump from their feet */
 .bounce {
   transform-box: fill-box;
   transform-origin: center bottom;
